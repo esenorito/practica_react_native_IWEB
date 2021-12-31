@@ -5,7 +5,7 @@ import Author from './Author';
 import QuizImage from './QuizImage';
 import Question from './Question';
 import Answer from './Answer';
-import { quizzes } from "../../assets/mock-data";
+import { quizzesIn } from "../../assets/mock-data";
 // import {
 //     BrowserRouter,
 //     Routes,
@@ -24,7 +24,7 @@ export default function Quiz(props) {
     const [score, setScore] = useState(0);
     const [finished, setFinished] = useState(false);
     const [currentQuiz, setCurrentQuiz] = useState(0);
-    const [quizzes, setQuizzes] = useState([...quizzes]);
+    const [quizzes, setQuizzes] = useState([...quizzesIn]);
     const [mapButtonsDisabled, setMapButtonsDisabled] = useState(mapButtonsDisabledInit);
     const [answers, setAnswers] = useState(new Array(quizzes.length).fill(""));
 
@@ -35,7 +35,7 @@ export default function Quiz(props) {
     if (quizzes.length == 0) {
         return (
             <View>
-                <h3>FATAL ERROR!! El array de quizzes está vacío.</h3>
+                <Text>FATAL ERROR!! El array de quizzes está vacío.</Text>
             </View>
         )
     }
@@ -44,24 +44,26 @@ export default function Quiz(props) {
 
     if (finished) {
         return (
-            <h1>El Score del juego es: {score}</h1>
+            <View>
+                <Text>El Score del juego es: {score}</Text>
+            </View>
         )
     }
 
     return (
         <View>
-            <nav>
+            {/* <nav>
                 <li><NavLink to='quiz'>Quiz</NavLink></li>
                 <li><NavLink to='tictactoe'>TicTacToe</NavLink></li>
-            </nav>
+            </nav> */}
             <Question quiz={quiz} />
             <QuizImage image={quiz.attachment} />
-            <Answer answer={answers[currentQuiz]} changeAnswer={this.changeAnswer} />
+            <Answer answer={answers[currentQuiz]} changeAnswer={changeAnswer} />
             <Author author={quiz.author} />
             <Actionbar textos={["Anterior", "Siguiente", "Submit"]}
-                changeQuiz={this.changeQuiz}
+                changeQuiz={changeQuiz}
                 mapButtonsDisabled={mapButtonsDisabled}
-                computeScore={this.computeScore} />
+                computeScore={computeScore} />
         </View>
 
     );
@@ -78,6 +80,8 @@ export default function Quiz(props) {
             case "Siguiente":
                 nuevoQuiz = currentQuiz + 1;
                 break;
+            default:
+                return;
         }
 
         var newMapButtonsDisabled = new Map();
@@ -85,32 +89,31 @@ export default function Quiz(props) {
         newMapButtonsDisabled.set('Siguiente', nuevoQuiz == quizzes.length - 1);
         newMapButtonsDisabled.set('Submit', false);
 
-        this.setState({ currentQuiz: nuevoQuiz, mapButtonsDisabled: newMapButtonsDisabled });
+        setCurrentQuiz(nuevoQuiz);
+        setMapButtonsDisabled(newMapButtonsDisabled);
+
     }
 
     function changeAnswer(answer) {
-        const currentQuiz = currentQuiz;
         var nuevasSoluciones = JSON.parse(JSON.stringify(answers));
         nuevasSoluciones[currentQuiz] = answer;
-
-        this.setState({ answers: nuevasSoluciones });
+        setAnswers(nuevasSoluciones);
     }
 
     function computeScore() {
         const newFinished = true;
         var newScore = 0;
-        var answers = JSON.parse(JSON.stringify(answers));
+        var copiaAnswers = JSON.parse(JSON.stringify(answers));
 
-        for (let i = 0; i < answers.length; i++) {
-            if (answers[i] == quizzes[i].answer) {
+        // var copiaAnswers = [];
+
+        for (let i = 0; i < copiaAnswers.length; i++) {
+            if (copiaAnswers[i] == quizzes[i].answer) {
                 newScore = newScore + 1;
             }
         }
-
-        this.setState({
-            finished: newFinished,
-            score: newScore
-        });
+        setFinished(newFinished);
+        setScore(newScore);
     }
 }
 
@@ -121,3 +124,5 @@ export default function Quiz(props) {
 // TODO: Configurar la página de Home y los links a las distintas
 // páginas web de la aplicación (Routers)
 // TODO: Revisar los ficheros en los que aparezca el tag "nav" y "li"
+
+// TODO: Revisar todas las llamdas a los setState

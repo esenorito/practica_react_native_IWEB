@@ -12,8 +12,9 @@ export default function Actionbar(props) {
                         props.changeQuiz(props.text);
                     }
                 }}
-                disabled={props.disabled}
-            >{props.text}</TouchableHighlight>
+                disabled={props.disabled}>
+                <Text>{props.text}</Text>
+            </TouchableHighlight>
         </View>
     );
 

@@ -1,4 +1,4 @@
-exports.quizzes = [{
+exports.quizzesIn = [{
     "id": 18,
     "question": "Capital of Cyprus",
     "answer": "Nicosia",
@@ -15,11 +15,11 @@ exports.quizzes = [{
             "url": "https://core.dit.upm.es/uploads/91712eceb48a55c134e80c8f38e955711cbeda8d59b19192fb75f945fcb0fb60"
         }
     },
-    "attachment": {
-        "filename": "capitals/Nicosia.jpg",
-        "mime": "image/jpeg",
-        "url": "https://core.dit.upm.es/uploads/capitals/Nicosia.jpg"
-    },
+    // "attachment": {
+    //     "filename": "capitals/Nicosia.jpg",
+    //     "mime": "image/jpeg",
+    //     "url": "https://core.dit.upm.es/uploads/capitals/Nicosia.jpg"
+    // },
     "favourite": false
 },
 {
