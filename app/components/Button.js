@@ -5,6 +5,7 @@ export default function Actionbar(props) {
     return (
         <View>
             <TouchableHighlight
+                style={props.style}
                 onPress={() => {
                     if (props.text == "Submit") {
                         props.computeScore();

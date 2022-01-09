@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import Actionbar from './Actionbar';
 import Author from './Author';
 import QuizImage from './QuizImage';
@@ -13,7 +13,7 @@ import { quizzesIn } from "../../assets/mock-data";
 //     NavLink
 //   } from "react-router-dom";
 // import error_image_not_found from "./images/error_image_not_found.jpg"
-
+const URL = "https://core.dit.upm.es/api/quizzes/random10wa?token=a83c791530fdc9bdc93a"
 
 export default function Quiz(props) {
     var mapButtonsDisabledInit = new Map();
@@ -28,9 +28,17 @@ export default function Quiz(props) {
     const [mapButtonsDisabled, setMapButtonsDisabled] = useState(mapButtonsDisabledInit);
     const [answers, setAnswers] = useState(new Array(quizzes.length).fill(""));
 
+    // async function componentDidMount() {
+    //     let response = await fetch(URL);
+    //     let quizzesServidor = await response.json();
+    //     setQuizzes(quizzesServidor);
+    // }
 
-    // TODO: Cambiar h1 y h3 por Text. Buscar el style correspondiente para
-    // mostrar cada uno con su tamaño correspondiente.
+    useEffect(async () => {
+        let response = await fetch(URL);
+        let quizzesServidor = await response.json();
+        setQuizzes(quizzesServidor);
+    }, []);
 
     if (quizzes.length == 0) {
         return (
@@ -51,16 +59,19 @@ export default function Quiz(props) {
     }
 
     return (
+
         <View>
             {/* <nav>
                 <li><NavLink to='quiz'>Quiz</NavLink></li>
                 <li><NavLink to='tictactoe'>TicTacToe</NavLink></li>
             </nav> */}
+            <Text style={styles.h1Tag}>Bienvenido al juego de preguntas.</Text>
             <Question quiz={quiz} />
             <QuizImage image={quiz.attachment} />
             <Answer answer={answers[currentQuiz]} changeAnswer={changeAnswer} />
-            <Author author={quiz.author} />
-            <Actionbar textos={["Anterior", "Siguiente", "Submit"]}
+            <Author style={styles.AuthorStyle} author={quiz.author} />
+            <Actionbar
+                textos={["Anterior", "Siguiente", "Submit"]}
                 changeQuiz={changeQuiz}
                 mapButtonsDisabled={mapButtonsDisabled}
                 computeScore={computeScore} />
@@ -117,12 +128,24 @@ export default function Quiz(props) {
     }
 }
 
+const styles = StyleSheet.create({
+    h1Tag: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: 20,
+    },
+    ButtonElements: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    AuthorStyle: {
+        alignSelf: 'flex-end',
+    }
 
+});
 
 // TODO: Añadir estilos en general a la práctica
-// TODO: Configurar la petición al servidor para conseguir los Quizzes
 // TODO: Configurar la página de Home y los links a las distintas
 // páginas web de la aplicación (Routers)
 // TODO: Revisar los ficheros en los que aparezca el tag "nav" y "li"
-
-// TODO: Revisar todas las llamdas a los setState
